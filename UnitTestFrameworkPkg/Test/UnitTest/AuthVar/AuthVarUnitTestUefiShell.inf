@@ -1,0 +1,31 @@
+## @file
+# Authenticated Variable UnitTest built for execution in UEFI Shell.
+#
+# Copyright (c) 2020, Intel Corporation. All rights reserved.<BR>
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION    = 0x00010006
+  BASE_NAME      = AuthVarUnitTestUefiShell
+  FILE_GUID      = 43CED9D0-9F5A-4E1E-BAE8-DE1729CBF0C8
+  MODULE_TYPE    = UEFI_APPLICATION
+  VERSION_STRING = 1.0
+  ENTRY_POINT    = AuthVarUnitTestEntryPoint
+
+[Sources]
+  AuthVarUnitTest.c
+
+[Guids]
+  gEfiGlobalVariableGuid
+  gEfiCustomModeEnableGuid
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  SecurityPkg/SecurityPkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiRuntimeServicesTableLib
