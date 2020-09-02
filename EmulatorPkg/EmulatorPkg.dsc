@@ -32,6 +32,7 @@
   DEFINE NETWORK_TLS_ENABLE       = FALSE
   DEFINE NETWORK_HTTP_BOOT_ENABLE = FALSE
   DEFINE NETWORK_ISCSI_ENABLE     = FALSE
+  DEFINE SECURE_BOOT_ENABLE       = TRUE
 
 [SkuIds]
   0|DEFAULT
@@ -89,6 +90,7 @@
   TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
   SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
+
   #
   # Platform
   #
@@ -106,11 +108,20 @@
   LockBoxLib|MdeModulePkg/Library/LockBoxNullLib/LockBoxNullLib.inf
   CpuExceptionHandlerLib|MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf
   TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
-  AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   SortLib|MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
+
+  !if $(SECURE_BOOT_ENABLE) == TRUE
+    IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
+    OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLibCrypto.inf
+    PlatformSecureLib|SecurityPkg/Library/PlatformSecureLibNull/PlatformSecureLibNull.inf
+    BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
+    AuthVariableLib|SecurityPkg/Library/AuthVariableLib/AuthVariableLib.inf
+  !else
+    AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
+  !endif
 
 [LibraryClasses.common.SEC]
   PeiServicesLib|EmulatorPkg/Library/SecPeiServicesLib/SecPeiServicesLib.inf
@@ -190,6 +201,10 @@
   gEmulatorPkgTokenSpaceGuid.PcdEmuFirmwareFdSize|0x002a0000
   gEmulatorPkgTokenSpaceGuid.PcdEmuFirmwareBlockSize|0x10000
   gEmulatorPkgTokenSpaceGuid.PcdEmuFirmwareVolume|L"../FV/FV_RECOVERY.fd"
+  !if $(SECURE_BOOT_ENABLE) == TRUE
+    gEfiMdeModulePkgTokenSpaceGuid.PcdMaxAuthVariableSize|0x2800
+    gEfiSecurityPkgTokenSpaceGuid.PcdUserPhysicalPresence|TRUE
+  !endif
 
   gEmulatorPkgTokenSpaceGuid.PcdEmuMemorySize|L"64!64"
 
