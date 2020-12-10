@@ -35,6 +35,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 CONST UINT8 mRsaE[] = { 0x01, 0x00, 0x01 };
 
 CONST UINT8 mSha256OidValue[] = { 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01 };
+CONST UINT8 mSha384OidValue[] = { 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02 };
+CONST UINT8 mSha512OidValue[] = { 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03 };
 
 //
 // Requirement for different signature type which have been defined in UEFI spec.
@@ -1901,7 +1903,7 @@ VerifyTimeBasedPayload (
 
   //
   // SignedData.digestAlgorithms shall contain the digest algorithm used when preparing the
-  // signature. Only a digest algorithm of SHA-256 is accepted.
+  // signature. Digest algorithm of SHA-256, SHA-384, SHA-512 are accepted.
   //
   //    According to PKCS#7 Definition:
   //        SignedData ::= SEQUENCE {
@@ -1916,7 +1918,9 @@ VerifyTimeBasedPayload (
   if ((Attributes & EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS) != 0) {
     if (SigDataSize >= (13 + sizeof (mSha256OidValue))) {
       if (((*(SigData + 1) & TWO_BYTE_ENCODE) != TWO_BYTE_ENCODE) ||
-           (CompareMem (SigData + 13, &mSha256OidValue, sizeof (mSha256OidValue)) != 0)) {
+           ((CompareMem (SigData + 13, &mSha256OidValue, sizeof (mSha256OidValue)) != 0) &&
+            (CompareMem (SigData + 13, &mSha384OidValue, sizeof (mSha384OidValue)) != 0) &&
+            (CompareMem (SigData + 13, &mSha512OidValue, sizeof (mSha512OidValue)) != 0))) {
           return EFI_SECURITY_VIOLATION;
         }
     }
