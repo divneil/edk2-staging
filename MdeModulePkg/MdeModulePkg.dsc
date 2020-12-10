@@ -19,6 +19,8 @@
   BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
   SKUID_IDENTIFIER               = DEFAULT
 
+!include UnitTestFrameworkPkg\UnitTestFrameworkPkgHost.dsc.inc
+
 [LibraryClasses]
   #
   # Entry point
@@ -432,6 +434,8 @@
   MdeModulePkg/Library/FmpAuthenticationLibNull/FmpAuthenticationLibNull.inf
   MdeModulePkg/Library/DxeCapsuleLibFmp/DxeCapsuleLib.inf
   MdeModulePkg/Library/DxeCapsuleLibFmp/DxeRuntimeCapsuleLib.inf
+
+  MdeModulePkg/Universal/Variable/RuntimeDxe/UnitTest/AuthVarUnitTestUefiShell.inf
 
 [Components.IA32, Components.X64, Components.AARCH64]
   MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
